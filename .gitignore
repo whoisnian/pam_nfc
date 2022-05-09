@@ -1,0 +1,7 @@
+# vscode config
+.vscode/
+
+# binaries
+a.out
+pam_nfc_scan
+pam_nfc.so
