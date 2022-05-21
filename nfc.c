@@ -61,13 +61,32 @@ LONG nfc_read_data(uint8_t *buf, size_t *len)
 {
     LONG rv = 0;
     size_t ori = *len;
-    rv = SCardTransmit(_phCard, &_pioSendPci, (LPCBYTE) "\x00\xA4\x04\x00\x0E\x4E\x43\x2E\x65\x43\x61\x72\x64\x2E\x44\x44\x46\x30\x31", 19, NULL, buf, len);
+    rv = SCardTransmit(_phCard, &_pioSendPci, (LPCBYTE) "\xFF\x82\x00\x00\x06\x00\x00\x00\x00\x00\x00", 11, NULL, buf, len); // Load Authentication Keys
     CHECK_SCARD_SUCCESS(rv);
     CHECK_SW_9000(buf, *len);
 
     *len = ori;
-    rv = SCardTransmit(_phCard, &_pioSendPci, (LPCBYTE) "\x00\xB0\x96\x00\x00", 5, NULL, buf, len);
+    rv = SCardTransmit(_phCard, &_pioSendPci, (LPCBYTE) "\xFF\x86\x00\x00\x05\x01\x00\x04\x60\x00", 10, NULL, buf, len); // Authentication
     CHECK_SCARD_SUCCESS(rv);
     CHECK_SW_9000(buf, *len);
+
+    size_t left = ori;
+    rv = SCardTransmit(_phCard, &_pioSendPci, (LPCBYTE) "\xFF\xB0\x00\x04\x10", 5, NULL, buf, &left); // Read Binary Block 0x04
+    CHECK_SCARD_SUCCESS(rv);
+    CHECK_SW_9000(buf, left);
+    *len = left - 2;
+
+    left = ori - *len;
+    rv = SCardTransmit(_phCard, &_pioSendPci, (LPCBYTE) "\xFF\xB0\x00\x05\x10", 5, NULL, buf + *len, &left); // Read Binary Block 0x05
+    CHECK_SCARD_SUCCESS(rv);
+    CHECK_SW_9000((buf + *len), left);
+    *len += left - 2;
+
+    left = ori - *len;
+    rv = SCardTransmit(_phCard, &_pioSendPci, (LPCBYTE) "\xFF\xB0\x00\x06\x10", 5, NULL, buf + *len, &left); // Read Binary Block 0x06
+    CHECK_SCARD_SUCCESS(rv);
+    CHECK_SW_9000((buf + *len), left);
+    *len += left - 2;
+
     return rv;
 }
