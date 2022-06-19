@@ -15,5 +15,6 @@
 
 LONG nfc_connect(const char *readerName);
 LONG nfc_disconnect();
+LONG nfc_transmit(uint8_t *sbuf, size_t slen, uint8_t *rbuf, size_t *rlen);
 LONG nfc_read_uid(uint8_t *buf, size_t *len);
 LONG nfc_read_data(uint8_t *buf, size_t *len);

@@ -10,12 +10,19 @@ sudo systemctl enable --now pcscd.service
 ```
 
 ## build
+* pam_nfc_init:  
+  `gcc -Wall -I/usr/include/PCSC -lpcsclite -lcrypt -lssl -o pam_nfc_init nfc.c pam_nfc_init.c`
 * pam_nfc_scan:  
   `gcc -Wall -I/usr/include/PCSC -lpcsclite -lcrypt -o pam_nfc_scan nfc.c pam_nfc_scan.c`
 * pam_nfc.so:  
   `gcc -Wall -fPIC -fno-stack-protector -shared -I/usr/include/PCSC -lpcsclite -lcrypt -lpam -o pam_nfc.so nfc.c pam_nfc.c`
 
 ## usage
+* pam_nfc_init:
+  * Place card on your NFC reader.
+  * Then run:
+    * `./pam_nfc_init ACR122U`: This will try to init card with factory key `ffffffffffffffff` and generate a new key.
+    * `./pam_nfc_init ACR122U 1234123412341234 abcdabcdabcdabcd`: This will use `1234123412341234` as old key and `abcdabcdabcdabcd` as new key.
 * pam_nfc_scan:
   * Place card on your NFC reader.
   * Then run `./pam_nfc_scan ACR122U`.

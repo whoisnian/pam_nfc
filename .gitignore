@@ -3,5 +3,6 @@
 
 # binaries
 a.out
+pam_nfc_init
 pam_nfc_scan
 pam_nfc.so

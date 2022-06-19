@@ -41,6 +41,14 @@ LONG nfc_disconnect()
     return SCardReleaseContext(_phContext);
 }
 
+LONG nfc_transmit(uint8_t *sbuf, size_t slen, uint8_t *rbuf, size_t *rlen)
+{
+    LONG rv = SCardTransmit(_phCard, &_pioSendPci, (LPCBYTE) sbuf, slen, NULL, rbuf, rlen);
+    CHECK_SCARD_SUCCESS(rv);
+    CHECK_SW_9000(rbuf, *rlen);
+    return rv;
+}
+
 LONG nfc_read_uid(uint8_t *buf, size_t *len)
 {
     LONG rv = SCardTransmit(_phCard, &_pioSendPci, (LPCBYTE) "\xFF\xCA\x00\x00\x00", 5, NULL, buf, len);
