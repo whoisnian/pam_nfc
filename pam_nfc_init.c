@@ -79,7 +79,7 @@ LONG erase_with_key(uint8_t *block_key)
     if (rv != 0)
         return rv;
 
-    uint8_t tx[18] = "\x80\xD4\x01\x00\x0D\x39\xF0\xF0\xAA\x33";
+    uint8_t tx[18] = "\x80\xD4\x01\x00\x0D\x39\xF0\xF0\xAA\x33"; // TODO: security check
     memcpy(tx + 10, block_key, 8);
     rx_size = sizeof(rx);
     return nfc_transmit((LPBYTE)tx, 18, rx, &rx_size);
