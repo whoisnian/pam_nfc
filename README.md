@@ -11,7 +11,7 @@ sudo systemctl enable --now pcscd.service
 
 ## build
 * pam_nfc_init:  
-  `gcc -Wall -I/usr/include/PCSC -lpcsclite -lcrypt -lssl -o pam_nfc_init nfc.c pam_nfc_init.c`
+  `gcc -Wall -I/usr/include/PCSC -lpcsclite -lcrypto -lssl -o pam_nfc_init nfc.c pam_nfc_init.c`
 * pam_nfc_scan:  
   `gcc -Wall -I/usr/include/PCSC -lpcsclite -lcrypt -o pam_nfc_scan nfc.c pam_nfc_scan.c`
 * pam_nfc.so:  
